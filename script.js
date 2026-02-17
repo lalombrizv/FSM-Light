@@ -25,11 +25,32 @@ function showList() {
     headerTitle.textContent = 'Mis Órdenes';
 }
 
-function hacerCheckIn() {
-    // Aquí iría la lógica de Angular navigator.geolocation.getCurrentPosition()
-    btnCheckIn.classList.add('hidden');
-    panelEjecucion.classList.remove('hidden');
-    
-    const now = new Date();
-    document.getElementById('horaCheckin').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+async function realizarCheckIn() {
+    // 1. Obtenemos la ubicación real del GPS del celular
+    navigator.geolocation.getCurrentPosition(async (position) => {
+        const datos = {
+            id_orden: 1, // Por ahora fijo, luego será dinámico
+            id_usuario: 1, // Tu ID de administrador
+            latitud: position.coords.latitude,
+            longitud: position.coords.longitude
+        };
+
+        try {
+            // 2. Enviamos los datos a tu servidor local
+            // NOTA: Reemplaza 'localhost' por la IP de tu computadora si usas el celular
+            const respuesta = await fetch('http://localhost:3000/api/checkin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            });
+
+            const resultado = await respuesta.json();
+            alert(resultado.mensaje); // "✅ Check-in registrado correctamente"
+        } catch (error) {
+            console.error('Error al conectar con el servidor:', error);
+            alert('No se pudo conectar con el servidor local');
+        }
+    }, (error) => {
+        alert('Error al obtener GPS: ' + error.message);
+    });
 }
