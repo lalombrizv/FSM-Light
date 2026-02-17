@@ -38,7 +38,7 @@ async function realizarCheckIn() {
         try {
             // 2. Enviamos los datos a tu servidor local
             // NOTA: Reemplaza 'localhost' por la IP de tu computadora si usas el celular
-            const respuesta = await fetch('http://localhost:3000/api/checkin', {
+            const respuesta = await fetch('http://192.168.68.109/api/checkin', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datos)
